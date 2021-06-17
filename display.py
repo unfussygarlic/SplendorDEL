@@ -11,8 +11,11 @@ class display(object):
         self.screen = pygame.display.set_mode((width, height))
         self.cc = ["r", "b", "bl", "w", "g"]
 
-        self.coinfont = pygame.font.Font(None, 20)
-        self.playerfont = pygame.font.Font(None, 40)
+        self.cfsize = 20
+        self.pfsize = 40
+
+        self.coinfont = pygame.font.Font(None, self.cfsize)
+        self.playerfont = pygame.font.Font(None, self.pfsize)
         self.deck = deque(maxlen=9)
     
     def hoverCoins(self, w, h, coords, pad, pos, memory):
@@ -125,6 +128,31 @@ class display(object):
             text = self.playerfont.render(f"Player {i+1}", True, PURPLE)
             self.screen.blit(text, coords[keys])
     
+    def displayPlayerStats(self, coords, w, h, pad, memory):
+        # memory = [self.zeroRemoval(i) for i in memory]
+
+        #Print Player Text
+        for i in range(len(coords)):
+            text = self.playerfont.render(f"Player {i+1}", True, PURPLE)
+            self.screen.blit(text, coords[i])
+
+            x, y = coords[i]
+            y += self.pfsize + pad
+            m = {x:y for x,y in memory[i].items() if y!=0}
+            for keys in m.keys():
+                pygame.draw.rect(self.screen, colors[keys], (x, y, w, h))
+
+                cpad = 5
+                text = self.coinfont.render(f"{m[keys]}", True, PURPLE)
+                center = ((x + (x+w))/2 - cpad, (y+ (y+h))/2 - cpad)
+                self.screen.blit(text, center)
+
+                x += (w + pad)
+        
+    
     def dispTurn(self, i):
         text = self.playerfont.render(f"Player {i+1}'s Turn", True, PURPLE)
         self.screen.blit(text, dimensions["turn"])
+    
+    def zeroRemoval(memory):
+        return {x:y for x,y in memory.items() if y!=0}

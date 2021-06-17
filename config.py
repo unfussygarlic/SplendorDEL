@@ -6,10 +6,10 @@ def getPlayerText(n, h):
     x, y = (100, 100)
     pad = h//(n+1)
 
-    pdict = {}
+    pdict = []
 
     for i in range(n):
-        pdict[f"player{i}"] = (x, y)
+        pdict.append((x, y))
         y += pad
     
     return pdict

@@ -8,7 +8,7 @@ import pygame
 pygame.init()
 WIDTH = 1280
 HEIGHT = 720
-n_players = 2
+n_players = 5
 
 disp = display(WIDTH, HEIGHT)
 deck = deck(10)
@@ -24,23 +24,24 @@ p1 = player()
 running = True
 
 cards = deck.getCards()
-player_text = getPlayerText(n_players, HEIGHT)
+playercoords = getPlayerText(n_players, HEIGHT)
 
 while running:
 
     cardmemory = deck.retMemory()
-    playermemory = p1.retMemory()
+    playermemory = [i.retMemory() for i in players]
 
     disp.screen.fill(BG_COLOR)
 
     pos = pygame.mouse.get_pos()
     disp.hoverCoins(*dimensions["coin"], pos, cardmemory)
     disp.hoverCards(*dimensions["card"], pos, cards)
-    disp.dispPlayerCoins(*dimensions["player"], playermemory)
-    disp.dispPlayerText(player_text)
+    # disp.dispPlayerCoins(*dimensions["player"], playermemory)
+    # disp.dispPlayerText(player_text)
+    disp.displayPlayerStats(playercoords, 30, 30, 30, playermemory)
     disp.dispTurn(1)
 
-    turn = 0
+    pidx = 0
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -50,16 +51,17 @@ while running:
             coins = disp.getCoinEncoding(*dimensions["coin"], pos)
 
             cardidx, card = disp.getCardDetail(*dimensions["card"], pos, cards)
-            
+
             if card:
-                buystat = p1.checkBuy(card)
+                buystat = players[pidx].checkBuy(card)
+                print(buystat)
                 if buystat:
-                    p1.addCards(card)
+                    players[pidx].addCards(card)
                     cards[cardidx] = deck.getCard()
 
-            if sum(coins) > 0:
-                turn += 1
+            # if sum(coins) > 0:
+            #     pidx += 1
             deck.drawCoin(coins)
-            p1.addCoins(coins)
+            players[pidx].addCoins(coins)
     
     pygame.display.update()
