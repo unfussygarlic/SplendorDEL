@@ -1,9 +1,10 @@
 from pygame.constants import BIG_ENDIAN
 
 
-def getPlayerText(n):
+def getPlayerText(n, h):
+    # variant = h//n
     x, y = (100, 100)
-    pad = 100
+    pad = h//(n+1)
 
     pdict = {}
 

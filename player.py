@@ -20,9 +20,23 @@ class player(object):
         for keys in self.m.keys():
             if card[1] == keys:
                 self.m[keys] += 1
+        
+        self.points += card[2]
+    
+    def checkBuy(self, card):
+        reqs = card[-1]
+        counter = 0
+        for keys in reqs.keys():
+            if self.m[keys] >= reqs[keys]:
+                counter += 1
+        
+        return counter
     
     def retMemory(self):
         return self.m
+    
+    def retPoints(self):
+        return self.points
     
     def showCoins(self):
         print(self.m)
