@@ -120,32 +120,32 @@ class display(object):
         
         return encoding
     
-    def dispPlayerCoins(self, w, h, coords, pad, memory):
-        x, y = coords
-        memory = {x:y for x,y in memory.items() if y!=0}
+    # def dispPlayerCoins(self, w, h, coords, pad, memory):
+    #     x, y = coords
+    #     memory = {x:y for x,y in memory.items() if y!=0}
 
-        for idx, keys in enumerate(memory.keys()):
-            pygame.draw.rect(self.screen, colors[keys], (x, y, w, h))
+    #     for idx, keys in enumerate(memory.keys()):
+    #         pygame.draw.rect(self.screen, colors[keys], (x, y, w, h))
 
-            cpad = 5
-            text = self.coinfont.render(f"{memory[keys]}", True, PURPLE)
-            center = ((x + (x+w))/2 - cpad, (y+ (y+h))/2 - cpad)
-            self.screen.blit(text, center)
+    #         cpad = 5
+    #         text = self.coinfont.render(f"{memory[keys]}", True, PURPLE)
+    #         center = ((x + (x+w))/2 - cpad, (y+ (y+h))/2 - cpad)
+    #         self.screen.blit(text, center)
 
-            x += (w + pad)
+    #         x += (w + pad)
         
-    def dispPlayerText(self, coords):
+    # def dispPlayerText(self, coords):
 
-        for i, keys in enumerate(coords.keys()):
-            text = self.playerfont.render(f"Player {i+1}", True, PURPLE)
-            self.screen.blit(text, coords[keys])
+    #     for i, keys in enumerate(coords.keys()):
+    #         text = self.playerfont.render(f"Player {i+1}", True, PURPLE)
+    #         self.screen.blit(text, coords[keys])
     
-    def displayPlayerStats(self, coords, w, h, pad, memory):
+    def displayPlayerStats(self, coords, w, h, pad, memory, points):
         # memory = [self.zeroRemoval(i) for i in memory]
 
         #Print Player Text
         for i in range(len(coords)):
-            text = self.playerfont.render(f"Player {i+1}", True, PURPLE)
+            text = self.playerfont.render(f"Player: {i+1} | Points: {points[i]}", True, PURPLE)
             self.screen.blit(text, coords[i])
 
             x, y = coords[i]

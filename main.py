@@ -38,6 +38,7 @@ while running:
 
     cardmemory = deck.retMemory()
     playermemory = [i.retMemory() for i in players]
+    playerpoints = [i.retPoints() for i in players]
 
     disp.screen.fill(BG_COLOR)
 
@@ -46,7 +47,7 @@ while running:
     disp.hoverCards(*dimensions["card"], pos, cards)
     # disp.dispPlayerCoins(*dimensions["player"], playermemory)
     # disp.dispPlayerText(player_text)
-    disp.displayPlayerStats(playercoords, *dimensions["player"], playermemory)
+    disp.displayPlayerStats(playercoords, *dimensions["player"], playermemory, playerpoints)
     disp.dispTurn(pidx)
 
     for event in pygame.event.get():
@@ -55,8 +56,18 @@ while running:
         
         if event.type == pygame.MOUSEBUTTONDOWN:
             coins = disp.getCoinEncoding(*dimensions["coin"], pos)
+            print(coins)
 
             cardidx, card = disp.getCardDetail(*dimensions["card"], pos, cards)
+
+            if card:
+                print(card)
+                buystat = players[pidx].checkBuy(card)
+                print(buystat)
+                if buystat:
+                    players[pidx].addCards(card)
+                    cards[cardidx] = deck.getCard()
+                    pidx += 1
 
             if coins.any():
                 # print(coins)
@@ -84,15 +95,6 @@ while running:
                         print("Invalid Selection")
                         cm = []
 
-            if card:
-                buystat = players[pidx].checkBuy(card)
-                if buystat:
-                    players[pidx].addCards(card)
-                    cards[cardidx] = deck.getCard()
-                    pidx += 1
-
-            # if sum(coins) > 0:
-            #     pidx += 1
             deck.drawCoin(coins)
     
     pygame.display.update()
