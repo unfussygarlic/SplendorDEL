@@ -16,12 +16,14 @@ class deck(object):
                         "g": n_coins}
         
         self.symbols = ["r", "b", "bl", "w", "g"]
-        self.card = namedtuple("DevCards", field_names=["color", "symbol", "value", "requirement"])
-        self.devcards = deque(maxlen= 90)
-        # self.highcards = deque(maxlen=30)
-        # self.midcards = deque(maxlen=30)
-        # self.lowcards = deque(maxlen=30)
-        # self.devcards = [self.highcards, self.midcards, self.lowcards]
+        self.types = ["high", "mid", "low"]
+
+        self.card = namedtuple("DevCards", field_names=["color", "symbol", "value", "requirement", "type"])
+        # self.devcards = deque(maxlen= 90)
+        self.highcards = deque(maxlen=30)
+        self.midcards = deque(maxlen=30)
+        self.lowcards = deque(maxlen=30)
+        self.devcards = [self.highcards, self.midcards, self.lowcards]
 
         self.cardmemory = []
         self.__initcards()
@@ -55,30 +57,38 @@ class deck(object):
             s = np.random.choice(self.symbols)
             v = np.random.choice(values[c_i])
             r = self.__retReq(reqs[c_i])
-            dc = self.card(c, s, v, r)
-            self.devcards.append(dc)
+            t = self.types[c_i]
+            dc = self.card(c, s, v, r, t)
+            self.devcards[c_i].append(dc)
             if (i+1) % 30 == 0:
                 c_i += 1
 
-    def getCards(self):
+    def shuffleCards(self):
+        for i in range(len(self.devcards)):
+            random.shuffle(self.devcards[i])
+
+    def drawCards(self):
         cards = []
-        random.shuffle(self.devcards)
+        # random.shuffle(self.devcards)
+        self.shuffleCards()
+        c_i = 0
         for i in range(9):
-            card = self.devcards.pop()
+            card = self.devcards[c_i].pop()
             cards.append(card)
+            if (i+1) % 3 == 0:
+                c_i += 1
         
         return cards
     
-    def getCard(self):
-        return self.devcards.pop()
-
-            
+    def drawCard(self, card):
+        for i, type in enumerate(self.types):
+            if card[-1] == type:
+                return self.devcards[i].pop()
+        # return self.devcards.pop()
+     
     def drawCoin(self, coins):
         for i, keys in enumerate(self.m.keys()):
             self.m[keys] -= coins[i]
-        
-    def drawCard(self, color):
-        pass
 
     def addCoin(self, coins):
         for i, keys in enumerate(self.m.keys()):

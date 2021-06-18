@@ -25,7 +25,7 @@ p1 = player()
 
 running = True
 
-cards = deck.getCards()
+cards = deck.drawCards()
 playercoords = getPlayerText(n_players, HEIGHT)
 
 pidx = 0
@@ -71,7 +71,7 @@ while running:
                 # print(buystat)
                 if buystat:
                     players[pidx].addCards(card, buytype)
-                    cards[cardidx] = deck.getCard()
+                    cards[cardidx] = deck.drawCard(card)
                     pidx += 1
 
             if coins.any():

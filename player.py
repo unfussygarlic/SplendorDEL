@@ -28,14 +28,14 @@ class player(object):
                 self.cardmem[keys] += 1
         
         if type == "coin":
-            reqs = card[-1]
+            reqs = card[-2]
             for keys in reqs.keys():
                 self.coinmem[keys] -= reqs[keys]
         
         self.points += card[2]
     
     def checkBuy(self, card):
-        reqs = card[-1]
+        reqs = card[-2]
         coincounter = 0
         cardcounter = 0
 

@@ -80,9 +80,9 @@ class display(object):
         value = self.coinfont.render(f"{card[2]}", True, PURPLE)
         self.screen.blit(value, vc)
 
-        for idx, keys in enumerate(card[-1].keys()):
+        for idx, keys in enumerate(card[-2].keys()):
             pygame.draw.rect(self.screen, color[keys], rc[idx])
-            text = self.coinfont.render(f"{card[-1][keys]}", True, PURPLE)
+            text = self.coinfont.render(f"{card[-2][keys]}", True, PURPLE)
             self.screen.blit(text, rcc[idx])
     
     def hoverCards(self, n, w, h, coords, pad, pos, cards):
@@ -158,10 +158,11 @@ class display(object):
             m2 = {x:y for x,y in cardmemory[i].items() if y!=0}
             h2 = h + 30
 
+            cpad = 5
+
             for keys in m1.keys():
                 pygame.draw.rect(self.screen, colors[keys], (x1, y1, w, h))
 
-                cpad = 5
                 text1 = self.coinfont.render(f"{m1[keys]}", True, PURPLE)
                 center1 = ((x1 + (x1+w))/2 - cpad, (y1+ (y1+h))/2 - cpad)
 
