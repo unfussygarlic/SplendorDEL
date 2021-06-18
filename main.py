@@ -10,7 +10,7 @@ import numpy as np
 pygame.init()
 WIDTH = 1280
 HEIGHT = 720
-n_players = 5
+n_players = 2
 
 disp = display(WIDTH, HEIGHT)
 deck = deck(10)

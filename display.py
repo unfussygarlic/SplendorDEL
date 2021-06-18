@@ -41,16 +41,26 @@ class display(object):
         sc = (x+10, y+10, 10, 10)
         vc = (x + w - 20, y + h - 20)
         
-        ypad = 30
-        cw = 20
-        ch = 20
+        xpad = 10
+        ypad = 40
+        cw = 30
+        ch = 30
+        rc = []
+        # for i in range(4):
+        #     rc.append((x + xpad, ypad + ypad))
         rc = ((x+10, y+30, cw, ch), (x+w-10-cw, y+30, cw, ch), (x+10, y+30+ypad, ch, ch), (x+w-10-cw, y+30+ypad, ch, cw))
-        # rcc = (())
+        
+        rcc = []
+        cpad = 5
+        for i in range(len(rc)):
+            x, y = rc[i][0:2]
+            center = ((x + (x+cw))/2 - cpad, (y+ (y+ch))/2 - cpad)
+            rcc.append(center)
 
-        return (sc, vc, rc)
+        return (sc, vc, rc, rcc)
     
     def dispCard(self, coords, w, h, card, color):
-        sc, vc, rc = self.getCardCoords(coords, w, h)
+        sc, vc, rc, rcc = self.getCardCoords(coords, w, h)
         
         pygame.draw.rect(self.screen, color[card[1]], sc)
         
@@ -59,6 +69,8 @@ class display(object):
 
         for idx, keys in enumerate(card[-1].keys()):
             pygame.draw.rect(self.screen, color[keys], rc[idx])
+            text = self.coinfont.render(f"{card[-1][keys]}", True, PURPLE)
+            self.screen.blit(text, rcc[idx])
     
     def hoverCards(self, n, w, h, coords, pad, pos, cards):
         x, y = coords
