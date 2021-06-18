@@ -21,13 +21,13 @@ class display(object):
     def hoverCoins(self, w, h, coords, pad, pos, memory):
         posx, posy = pos
         x, y = coords
-        memory = {x:y for x,y in memory.items() if y!=0}
+        # memory = {x:y for x,y in memory.items() if y!=0}
 
         for i, keys in enumerate(memory.keys()):
             if x <= posx <= (x + w) and y <= posy <= y + h:
-                pygame.draw.rect(self.screen, dim_colors[self.cc[i]], (x, y, w, h))
+                pygame.draw.rect(self.screen, dim_colors[keys], (x, y, w, h))
             else:
-                pygame.draw.rect(self.screen, colors[self.cc[i]], (x, y, w, h))
+                pygame.draw.rect(self.screen, colors[keys], (x, y, w, h))
             
             cpad = 5
             center = ((x + (x+w))/2 - cpad, (y+ (y+h))/2 - cpad)
@@ -35,6 +35,19 @@ class display(object):
             self.screen.blit(text, center)
 
             y += (h+pad)
+    
+    def getCoinEncoding(self, w, h, coords, pad, pos, memory):
+        encoding = np.zeros(len(self.cc), dtype = np.int)
+        memlist = [memory[keys] for keys in memory]
+        posx, posy = pos
+        x, y = coords
+        for i in range(len(self.cc)):
+            if x <= posx <= (x + w) and y <= posy <= y + h and memlist[i] > 0:
+                encoding[i] = 1
+            
+            y += (h+pad)
+        
+        return encoding
     
     def getCardCoords(self, coords, w, h):
         x, y = coords
@@ -108,18 +121,6 @@ class display(object):
                 x = coords[0]
         return None, None
     
-    def getCoinEncoding(self, w, h, coords, pad, pos):
-        encoding = np.zeros(len(self.cc), dtype = np.int)
-        posx, posy = pos
-        x, y = coords
-        for i in range(len(self.cc)):
-            if x <= posx <= (x + w) and y <= posy <= y + h:
-                encoding[i] = 1
-            
-            y += (h+pad)
-        
-        return encoding
-    
     # def dispPlayerCoins(self, w, h, coords, pad, memory):
     #     x, y = coords
     #     memory = {x:y for x,y in memory.items() if y!=0}
@@ -140,7 +141,7 @@ class display(object):
     #         text = self.playerfont.render(f"Player {i+1}", True, PURPLE)
     #         self.screen.blit(text, coords[keys])
     
-    def displayPlayerStats(self, coords, w, h, pad, memory, points):
+    def dispPlayerStats(self, coords, w, h, pad, coinmemory, cardmemory, points):
         # memory = [self.zeroRemoval(i) for i in memory]
 
         #Print Player Text
@@ -148,23 +149,36 @@ class display(object):
             text = self.playerfont.render(f"Player: {i+1} | Points: {points[i]}", True, PURPLE)
             self.screen.blit(text, coords[i])
 
-            x, y = coords[i]
-            y += self.pfsize + pad
-            m = {x:y for x,y in memory[i].items() if y!=0}
-            for keys in m.keys():
-                pygame.draw.rect(self.screen, colors[keys], (x, y, w, h))
+            x1, y1 = coords[i]
+            y1 += self.pfsize + pad
+            m1 = {x:y for x,y in coinmemory[i].items() if y!=0}
+
+            x2, y2 = coords[i]
+            y2 += (h + 20 + self.pfsize + pad)
+            m2 = {x:y for x,y in cardmemory[i].items() if y!=0}
+            h2 = h + 30
+
+            for keys in m1.keys():
+                pygame.draw.rect(self.screen, colors[keys], (x1, y1, w, h))
 
                 cpad = 5
-                text = self.coinfont.render(f"{m[keys]}", True, PURPLE)
-                center = ((x + (x+w))/2 - cpad, (y+ (y+h))/2 - cpad)
-                self.screen.blit(text, center)
+                text1 = self.coinfont.render(f"{m1[keys]}", True, PURPLE)
+                center1 = ((x1 + (x1+w))/2 - cpad, (y1+ (y1+h))/2 - cpad)
 
-                x += (w + pad)
-        
+                self.screen.blit(text1, center1)
+
+                x1 += (w + pad)
+
+            for keys in m2.keys():
+                pygame.draw.rect(self.screen, colors[keys], (x2, y2, w, h2))
+
+                text2 = self.coinfont.render(f"{m2[keys]}", True, PURPLE)
+                center2 = ((x2 + (x2+w))/2 - cpad, (y2+ (y2+h2))/2 - cpad)
+                
+                self.screen.blit(text2, center2)
+                
+                x2 += (w + pad)        
     
     def dispTurn(self, i):
         text = self.playerfont.render(f"Player {i+1}'s Turn", True, PURPLE)
         self.screen.blit(text, dimensions["turn"])
-    
-    def zeroRemoval(memory):
-        return {x:y for x,y in memory.items() if y!=0}

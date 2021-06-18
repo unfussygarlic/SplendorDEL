@@ -35,19 +35,24 @@ while running:
 
     if pidx >= n_players:
         pidx = 0
+    
+    players[pidx].nonNegativeCheck()
+    deck.nonNegativeCheck()
 
-    cardmemory = deck.retMemory()
-    playermemory = [i.retMemory() for i in players]
+    deckmemory = deck.retMemory()
+
+    coinmemory = [i.retCoinMemory() for i in players]
+    cardmemory = [i.retCardMemory() for i in players]
     playerpoints = [i.retPoints() for i in players]
 
     disp.screen.fill(BG_COLOR)
 
     pos = pygame.mouse.get_pos()
-    disp.hoverCoins(*dimensions["coin"], pos, cardmemory)
+    disp.hoverCoins(*dimensions["coin"], pos, deckmemory)
     disp.hoverCards(*dimensions["card"], pos, cards)
     # disp.dispPlayerCoins(*dimensions["player"], playermemory)
     # disp.dispPlayerText(player_text)
-    disp.displayPlayerStats(playercoords, *dimensions["player"], playermemory, playerpoints)
+    disp.dispPlayerStats(playercoords, *dimensions["player"], coinmemory, cardmemory, playerpoints)
     disp.dispTurn(pidx)
 
     for event in pygame.event.get():
@@ -55,17 +60,17 @@ while running:
             running = False
         
         if event.type == pygame.MOUSEBUTTONDOWN:
-            coins = disp.getCoinEncoding(*dimensions["coin"], pos)
-            print(coins)
+            coins = disp.getCoinEncoding(*dimensions["coin"], pos, deckmemory)
+            # print(coins)
 
             cardidx, card = disp.getCardDetail(*dimensions["card"], pos, cards)
 
             if card:
-                print(card)
-                buystat = players[pidx].checkBuy(card)
-                print(buystat)
+                # print(card)
+                buystat, buytype = players[pidx].checkBuy(card)
+                # print(buystat)
                 if buystat:
-                    players[pidx].addCards(card)
+                    players[pidx].addCards(card, buytype)
                     cards[cardidx] = deck.getCard()
                     pidx += 1
 

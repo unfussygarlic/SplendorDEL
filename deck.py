@@ -89,3 +89,8 @@ class deck(object):
         
     def __len__(self):
         return len(self.devcards)
+    
+    def nonNegativeCheck(self):
+        for key in self.m:
+            if self.m[key] < 0:
+                self.m[key] = 0
