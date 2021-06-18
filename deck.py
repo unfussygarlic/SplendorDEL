@@ -79,6 +79,10 @@ class deck(object):
         
     def drawCard(self, color):
         pass
+
+    def addCoin(self, coins):
+        for i, keys in enumerate(self.m.keys()):
+            self.m[keys] += coins[i]
     
     def retMemory(self):
         return self.m

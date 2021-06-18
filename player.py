@@ -30,7 +30,7 @@ class player(object):
             if self.m[keys] >= reqs[keys]:
                 counter += 1
         
-        return counter
+        return True if counter > 0 else False
     
     def retMemory(self):
         return self.m
