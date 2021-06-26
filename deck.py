@@ -32,6 +32,9 @@ class deck(object):
     def __getCombinations(self, n):
         numbers = [1, 2, 3, 4, 5, 6, 7]
         res = [seq for i in range(len(numbers), 0, -1) for seq in combinations(numbers, i) if sum(seq) == n]
+        # res = [i for i in res if len(i) == 3 or len(i) == 4]
+        print(res)
+
         return res
     
     def __retReq(self, r):
@@ -47,7 +50,7 @@ class deck(object):
         
     def __initcards(self):
         colors = ["b", "y", "o"]
-        reqs = [7, 8, 9, 10, 11, 12]
+        reqs = [7, 8, 9]
         
         c_i = 0
         value = 3
