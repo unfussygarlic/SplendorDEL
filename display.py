@@ -3,7 +3,7 @@ import pygame
 from collections import deque, namedtuple
 
 from config import colors, dim_colors, dimensions
-from config import BG_COLOR, PURPLE
+from config import BG_COLOR, PURPLE, WHITE
 
 class display(object):
 
@@ -11,10 +11,12 @@ class display(object):
         self.screen = pygame.display.set_mode((width, height))
         self.cc = ["r", "b", "bl", "w", "g"]
 
-        self.cfsize = 20
+        self.cfsize = 22
         self.pfsize = 40
+        self.cvfsize = 30
 
         self.coinfont = pygame.font.Font(None, self.cfsize)
+        self.cardvaluefont = pygame.font.Font(None, self.cvfsize)
         self.playerfont = pygame.font.Font(None, self.pfsize)
         self.deck = deque(maxlen=9)
     
@@ -31,7 +33,7 @@ class display(object):
             
             cpad = 5
             center = ((x + (x+w))/2 - cpad, (y+ (y+h))/2 - cpad)
-            text = self.coinfont.render(f"{memory[keys]}", True, PURPLE)
+            text = self.coinfont.render(f"{memory[keys]}", True, BG_COLOR)
             self.screen.blit(text, center)
 
             y += (h+pad)
@@ -51,13 +53,13 @@ class display(object):
     
     def getCardCoords(self, coords, w, h):
         x, y = coords
-        sc = (x+10, y+10, 10, 10)
-        vc = (x + w - 20, y + h - 20)
+        sc = (x+10, y+10, w - 10- 10, 10)
+        vc = (x + w - 30, y + h - 30)
         
         xpad = 10
         ypad = 40
-        cw = 30
-        ch = 30
+        cw = 35
+        ch = 35
         rc = []
         # for i in range(4):
         #     rc.append((x + xpad, ypad + ypad))
@@ -77,12 +79,12 @@ class display(object):
         
         pygame.draw.rect(self.screen, color[card[1]], sc)
         
-        value = self.coinfont.render(f"{card[2]}", True, PURPLE)
+        value = self.cardvaluefont.render(f"{card[2]}", True, BG_COLOR)
         self.screen.blit(value, vc)
 
         for idx, keys in enumerate(card[-2].keys()):
             pygame.draw.rect(self.screen, color[keys], rc[idx])
-            text = self.coinfont.render(f"{card[-2][keys]}", True, PURPLE)
+            text = self.coinfont.render(f"{card[-2][keys]}", True, BG_COLOR)
             self.screen.blit(text, rcc[idx])
     
     def hoverCards(self, n, w, h, coords, pad, pos, cards):
@@ -146,7 +148,7 @@ class display(object):
 
         #Print Player Text
         for i in range(len(coords)):
-            text = self.playerfont.render(f"Player: {i+1} | Points: {points[i]}", True, PURPLE)
+            text = self.playerfont.render(f"Player: {i+1} | Points: {points[i]}", True, WHITE)
             self.screen.blit(text, coords[i])
 
             x1, y1 = coords[i]
@@ -161,10 +163,11 @@ class display(object):
             cpad = 5
 
             for keys in m1.keys():
-                pygame.draw.rect(self.screen, colors[keys], (x1, y1, w, h))
+                pygame.draw.circle(self.screen, colors[keys], (x1, y1), 20)
 
-                text1 = self.coinfont.render(f"{m1[keys]}", True, PURPLE)
-                center1 = ((x1 + (x1+w))/2 - cpad, (y1+ (y1+h))/2 - cpad)
+                text1 = self.coinfont.render(f"{m1[keys]}", True, BG_COLOR)
+                # center1 = ((x1 + (x1+w))/2 - cpad, (y1+ (y1+h))/2 - cpad)
+                center1 = (x1 - cpad, y1 - cpad)
 
                 self.screen.blit(text1, center1)
 
@@ -173,7 +176,7 @@ class display(object):
             for keys in m2.keys():
                 pygame.draw.rect(self.screen, colors[keys], (x2, y2, w, h2))
 
-                text2 = self.coinfont.render(f"{m2[keys]}", True, PURPLE)
+                text2 = self.coinfont.render(f"{m2[keys]}", True, BG_COLOR)
                 center2 = ((x2 + (x2+w))/2 - cpad, (y2+ (y2+h2))/2 - cpad)
                 
                 self.screen.blit(text2, center2)
@@ -181,5 +184,5 @@ class display(object):
                 x2 += (w + pad)        
     
     def dispTurn(self, i):
-        text = self.playerfont.render(f"Player {i+1}'s Turn", True, PURPLE)
+        text = self.playerfont.render(f"Player {i+1}'s Turn", True, WHITE)
         self.screen.blit(text, dimensions["turn"])

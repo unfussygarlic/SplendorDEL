@@ -51,16 +51,16 @@ class deck(object):
         
     def __initcards(self):
         colors = ["b", "y", "o"]
-        reqs = [[3, 4, 5], [6, 7, 8], [7, 8, 9, 10, 11, 12]]
+        reqs = [7, 8, 9, 10, 11, 12]
         
         c_i = 0
-        values = [[0, 0], [1,2], [3, 4]]
+        value = 3
         for i in range(90):
             # c = colors[c_i]
             c = np.random.choice(colors)
             s = np.random.choice(self.symbols)
-            v = np.random.choice(values[c_i])
-            r = self.__retReq(reqs[c_i])
+            v = 3
+            r = self.__retReq(reqs)
             t = self.types[c_i]
             dc = self.card(c, s, v, r, t)
             self.devcards[c_i].append(dc)
