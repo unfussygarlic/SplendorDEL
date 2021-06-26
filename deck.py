@@ -4,6 +4,7 @@ from collections import deque, namedtuple
 from itertools import product, combinations
 
 from numpy import random
+from numpy.lib.function_base import select
 
 class deck(object):
 
@@ -24,6 +25,9 @@ class deck(object):
         self.midcards = deque(maxlen=30)
         self.lowcards = deque(maxlen=30)
         self.devcards = [self.highcards, self.midcards, self.lowcards]
+
+        #currect deck
+        self.cd = []
 
         self.cardmemory = []
         self.__initcards()
@@ -75,15 +79,27 @@ class deck(object):
         for i in range(9):
             card = self.devcards[c_i].pop()
             cards.append(card)
+            self.cd.append(card)
             if (i+1) % 3 == 0:
                 c_i += 1
         
         return cards
     
     def drawCard(self, card):
+
         for i, type in enumerate(self.types):
             if card[-1] == type:
-                return self.devcards[i].pop()
+                next_card = self.devcards[i].pop()
+                break
+            break
+        
+        for i in range(len(self.cd)):
+            # if card[0] == self.cd[i][0] and card[1] == self.cd[i][1]:
+            if card == self.cd[i]:
+                self.cd[i] = next_card
+        
+        return next_card
+                # return self.devcards[i].pop()
         # return self.devcards.pop()
      
     def drawCoin(self, coins):
@@ -96,6 +112,13 @@ class deck(object):
     
     def retMemory(self):
         return self.m
+    
+    def printCD(self):
+        colors = [i[1] for i in self.cd]
+        print(colors)
+
+    def retCards(self):
+        return self.cd
         
     def __len__(self):
         return len(self.devcards)

@@ -17,6 +17,8 @@ class player(object):
                         "g": 0}
         
         self.points = 0
+
+        # self.knowledge = {}
         
     def addCoins(self, coins):
         for i, keys in enumerate(self.coinmem.keys()):
@@ -65,6 +67,13 @@ class player(object):
     
     def retPoints(self):
         return self.points
+    
+    def retOverallMemory(self):
+        memory = {}
+        for key in self.coinmem:
+            memory[key] = self.coinmem[key] + self.cardmem[key]
+
+        return memory
     
     def showCoins(self):
         print(self.m)

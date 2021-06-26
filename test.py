@@ -4,7 +4,7 @@ from deck import deck
 from player import player
 from config import dimensions, BG_COLOR
 from config import getPlayerText
-from knowledge import coinKnowledge
+from knowledge import knowledge
 
 import pygame
 import numpy as np
@@ -22,7 +22,7 @@ players = []
 for i in range(n_players):
     players.append(player())
 
-k = coinKnowledge(n_players, deck.retMemory())
+# k = knowledge(deck, players)
 
 running = True
 
@@ -61,8 +61,6 @@ while running:
             running = False
         
         if event.type == pygame.MOUSEBUTTONDOWN:
-            # deck.printCD()
-            k.updateKnowledge(deckmemory, deck.retCards(), players)
             coins = disp.getCoinEncoding(*dimensions["coin"], pos, deckmemory)
             # print(coins)
 
