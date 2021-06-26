@@ -184,5 +184,5 @@ class display(object):
                 x2 += (w + pad)        
     
     def dispTurn(self, i):
-        text = self.playerfont.render(f"Player {i+1}'s Turn", True, PURPLE)
+        text = self.playerfont.render(f"Player {i+1}'s Turn", True, WHITE)
         self.screen.blit(text, dimensions["turn"])
