@@ -1,4 +1,4 @@
-# Splendor DEL
+# Splendor using Dynamic Epistemic Logic
 
 Created using `Python 3.8.4`
 
